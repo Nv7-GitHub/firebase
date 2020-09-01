@@ -33,6 +33,9 @@ func (f *Firebase) Refresh() error {
 
 // CreateApp creates a firebase app without a service account
 func CreateApp(DatabaseURL, APIKey string) *Firebase {
+	if DatabaseURL[len(DatabaseURL)-1] != '/' {
+		DatabaseURL += "/"
+	}
 	return &Firebase{
 		DatabaseURL,
 		APIKey,
@@ -45,6 +48,10 @@ func CreateApp(DatabaseURL, APIKey string) *Firebase {
 
 // CreateAppWithServiceAccount creates a firebase app with a service account
 func CreateAppWithServiceAccount(DatabaseURL, APIKey string, ServiceAccount []byte) (*Firebase, error) {
+	if DatabaseURL[len(DatabaseURL)-1] != '/' {
+		DatabaseURL += "/"
+	}
+
 	conf, err := google.JWTConfigFromJSON(ServiceAccount, "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/firebase.database")
 	if err != nil {
 		return new(Firebase), err
