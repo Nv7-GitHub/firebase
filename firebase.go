@@ -12,6 +12,7 @@ import (
 // Firebase contains the data required for the web API
 type Firebase struct {
 	DatabaseURL       string
+	APIKey            string
 	ServiceAccount    []byte
 	Config            *jwt.Config
 	Token             *oauth2.Token
@@ -31,9 +32,10 @@ func (f *Firebase) Refresh() error {
 }
 
 // CreateApp creates a firebase app without a service account
-func CreateApp(DatabaseURL string) *Firebase {
+func CreateApp(DatabaseURL, APIKey string) *Firebase {
 	return &Firebase{
 		DatabaseURL,
+		APIKey,
 		make([]byte, 0),
 		new(jwt.Config),
 		new(oauth2.Token),
@@ -42,7 +44,7 @@ func CreateApp(DatabaseURL string) *Firebase {
 }
 
 // CreateAppWithServiceAccount creates a firebase app with a service account
-func CreateAppWithServiceAccount(DatabaseURL string, ServiceAccount []byte) (*Firebase, error) {
+func CreateAppWithServiceAccount(DatabaseURL, APIKey string, ServiceAccount []byte) (*Firebase, error) {
 	conf, err := google.JWTConfigFromJSON(ServiceAccount, "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/firebase.database")
 	if err != nil {
 		return new(Firebase), err
@@ -55,6 +57,7 @@ func CreateAppWithServiceAccount(DatabaseURL string, ServiceAccount []byte) (*Fi
 
 	return &Firebase{
 		DatabaseURL,
+		APIKey,
 		ServiceAccount,
 		conf,
 		tok,
