@@ -37,12 +37,12 @@ func CreateApp(DatabaseURL, APIKey string) *Firebase {
 		DatabaseURL += "/"
 	}
 	return &Firebase{
-		DatabaseURL,
-		APIKey,
-		make([]byte, 0),
-		new(jwt.Config),
-		new(oauth2.Token),
-		false,
+		DatabaseURL:       DatabaseURL,
+		APIKey:            APIKey,
+		ServiceAccount:    make([]byte, 0),
+		Config:            new(jwt.Config),
+		Token:             new(oauth2.Token),
+		HasServiceAccount: false,
 	}
 }
 
@@ -63,11 +63,11 @@ func CreateAppWithServiceAccount(DatabaseURL, APIKey string, ServiceAccount []by
 	}
 
 	return &Firebase{
-		DatabaseURL,
-		APIKey,
-		ServiceAccount,
-		conf,
-		tok,
-		true,
+		DatabaseURL:       DatabaseURL,
+		APIKey:            APIKey,
+		ServiceAccount:    ServiceAccount,
+		Config:            conf,
+		Token:             tok,
+		HasServiceAccount: true,
 	}, nil
 }
