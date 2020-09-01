@@ -35,7 +35,11 @@ func (db *Db) Set(path string, data []byte) error {
 	}
 
 	var respdata map[string]interface{}
-	json.Unmarshal(body, &respdata)
+	err = json.Unmarshal(body, &respdata)
+	if err != nil {
+		return err
+	}
+
 	_, exists := respdata["error"]
 	if exists {
 		return errors.New(respdata["error"].(string))
