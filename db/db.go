@@ -24,7 +24,12 @@ func CreateDatabase(app *firebase.Firebase) *Db {
 func (db *Db) Get(path string) ([]byte, error) {
 	db.App.Refresh()
 
-	resp, err := http.Get(db.App.DatabaseURL + path + ".json")
+	url := db.App.DatabaseURL + path + ".json"
+	if db.App.HasServiceAccount {
+		url += "?access_token=" + db.App.Token.AccessToken
+	}
+
+	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +65,12 @@ func (db *Db) Set(path string, data []byte) error {
 
 	client := &http.Client{}
 
-	req, err := http.NewRequest("PUT", db.App.DatabaseURL+path+".json", strings.NewReader(string(data)))
+	url := db.App.DatabaseURL + path + ".json"
+	if db.App.HasServiceAccount {
+		url += "?access_token=" + db.App.Token.AccessToken
+	}
+
+	req, err := http.NewRequest("PUT", url, strings.NewReader(string(data)))
 	if err != nil {
 		return err
 	}

@@ -11,19 +11,18 @@ import (
 
 // Firebase contains the data required for the web API
 type Firebase struct {
-	DatabaseURL    string
-	ServiceAccount []byte
-
-	config            *jwt.Config
-	token             *oauth2.Token
-	hasServiceAccount bool
+	DatabaseURL       string
+	ServiceAccount    []byte
+	Config            *jwt.Config
+	Token             *oauth2.Token
+	HasServiceAccount bool
 }
 
 // Refresh checks if oauth2 token needs to be refreshed, refreshes if needed
 func (f *Firebase) Refresh() error {
-	if f.hasServiceAccount && time.Since(f.token.Expiry) > 0 {
+	if f.HasServiceAccount && time.Since(f.Token.Expiry) > 0 {
 		var err error
-		f.token, err = f.config.TokenSource(context.Background()).Token()
+		f.Token, err = f.Config.TokenSource(context.Background()).Token()
 		if err != nil {
 			return err
 		}
