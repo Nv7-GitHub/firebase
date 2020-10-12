@@ -31,7 +31,7 @@ var serviceAccount []byte = []byte(`
 `)
 
 func main() {
-    app, err := firebaseCreateAppWithServiceAccount("https://[PROJECT_ID].firebaseio.com", "[API_KEY]", serviceAccount)
+    app, err := firebase.CreateAppWithServiceAccount("https://[PROJECT_ID].firebaseio.com", "[API_KEY]", serviceAccount)
     if err != nil {
         panic(err)
     }
