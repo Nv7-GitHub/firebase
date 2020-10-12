@@ -17,6 +17,8 @@ type Firebase struct {
 	Config            *jwt.Config
 	Token             *oauth2.Token
 	HasServiceAccount bool
+	Prefix            string
+	Headers           map[string]string
 }
 
 // Refresh checks if oauth2 token needs to be refreshed, refreshes if needed
@@ -43,6 +45,8 @@ func CreateApp(DatabaseURL, APIKey string) *Firebase {
 		Config:            new(jwt.Config),
 		Token:             new(oauth2.Token),
 		HasServiceAccount: false,
+		Prefix:            "",
+		Headers:           make(map[string]string, 0),
 	}
 }
 
@@ -69,5 +73,7 @@ func CreateAppWithServiceAccount(DatabaseURL, APIKey string, ServiceAccount []by
 		Config:            conf,
 		Token:             tok,
 		HasServiceAccount: true,
+		Prefix:            "",
+		Headers:           make(map[string]string, 0),
 	}, nil
 }

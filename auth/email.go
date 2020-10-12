@@ -14,7 +14,7 @@ import (
 func (a *Auth) SignUpWithEmailAndPassword(email string, password string) (*User, error) {
 	client := &http.Client{}
 
-	url := "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + a.App.APIKey
+	url := a.App.Prefix + "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + a.App.APIKey
 
 	data := map[string]interface{}{"email": email, "password": password, "returnSecureToken": true}
 	reqdata, err := json.Marshal(data)
@@ -25,6 +25,10 @@ func (a *Auth) SignUpWithEmailAndPassword(email string, password string) (*User,
 	req, err := http.NewRequest("POST", url, strings.NewReader(string(reqdata)))
 	if err != nil {
 		return nil, err
+	}
+
+	for k, v := range a.App.Headers {
+		req.Header.Set(k, v)
 	}
 
 	resp, err := client.Do(req)
@@ -68,7 +72,7 @@ func (a *Auth) SignUpWithEmailAndPassword(email string, password string) (*User,
 func (a *Auth) SignInWithEmailAndPassword(email string, password string) (*User, error) {
 	client := &http.Client{}
 
-	url := "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + a.App.APIKey
+	url := a.App.Prefix + "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + a.App.APIKey
 
 	data := map[string]interface{}{"email": email, "password": password, "returnSecureToken": true}
 	reqdata, err := json.Marshal(data)
@@ -79,6 +83,10 @@ func (a *Auth) SignInWithEmailAndPassword(email string, password string) (*User,
 	req, err := http.NewRequest("POST", url, strings.NewReader(string(reqdata)))
 	if err != nil {
 		return nil, err
+	}
+
+	for k, v := range a.App.Headers {
+		req.Header.Set(k, v)
 	}
 
 	resp, err := client.Do(req)
@@ -123,7 +131,7 @@ func (a *Auth) SignInWithEmailAndPassword(email string, password string) (*User,
 func (a *Auth) ResetPassword(email string) error {
 	client := &http.Client{}
 
-	url := "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + a.App.APIKey
+	url := a.App.Prefix + "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + a.App.APIKey
 
 	data := map[string]interface{}{"email": email, "requestType": "PASSWORD_RESET"}
 	reqdata, err := json.Marshal(data)
@@ -134,6 +142,10 @@ func (a *Auth) ResetPassword(email string) error {
 	req, err := http.NewRequest("POST", url, strings.NewReader(string(reqdata)))
 	if err != nil {
 		return err
+	}
+
+	for k, v := range a.App.Headers {
+		req.Header.Set(k, v)
 	}
 
 	resp, err := client.Do(req)

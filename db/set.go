@@ -14,7 +14,7 @@ func (db *Db) Set(path string, data []byte) error {
 
 	client := &http.Client{}
 
-	url := db.App.DatabaseURL + path + ".json"
+	url := db.App.Prefix + db.App.DatabaseURL + path + ".json"
 	if db.App.HasServiceAccount {
 		url += "?access_token=" + db.App.Token.AccessToken
 	}
@@ -22,6 +22,10 @@ func (db *Db) Set(path string, data []byte) error {
 	req, err := http.NewRequest("PUT", url, strings.NewReader(string(data)))
 	if err != nil {
 		return err
+	}
+
+	for k, v := range db.App.Headers {
+		req.Header.Set(k, v)
 	}
 
 	resp, err := client.Do(req)

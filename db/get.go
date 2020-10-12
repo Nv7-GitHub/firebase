@@ -10,12 +10,23 @@ import (
 func (db *Db) Get(path string) ([]byte, error) {
 	db.App.Refresh()
 
-	url := db.App.DatabaseURL + path + ".json"
+	client := &http.Client{}
+
+	url := db.App.Prefix + db.App.DatabaseURL + path + ".json"
 	if db.App.HasServiceAccount {
 		url += "?access_token=" + db.App.Token.AccessToken
 	}
 
-	resp, err := http.Get(url)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	for k, v := range db.App.Headers {
+		req.Header.Set(k, v)
+	}
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}

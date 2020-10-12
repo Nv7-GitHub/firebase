@@ -14,7 +14,7 @@ import (
 func (a *Auth) SignInWithCustomToken(token string) (*User, error) {
 	client := &http.Client{}
 
-	url := "https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=" + a.App.APIKey
+	url := a.App.Prefix + "https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=" + a.App.APIKey
 
 	data := map[string]interface{}{"token": token, "returnSecureToken": true}
 	reqdata, err := json.Marshal(data)
@@ -65,7 +65,7 @@ func (a *Auth) SignInWithCustomToken(token string) (*User, error) {
 func (a *Auth) RefreshTokenToIDToken(refreshToken string) (*User, error) {
 	client := &http.Client{}
 
-	url := "https://securetoken.googleapis.com/v1/token?key=" + a.App.APIKey
+	url := a.App.Prefix + "https://securetoken.googleapis.com/v1/token?key=" + a.App.APIKey
 
 	reqdata := "grant_type=refresh_token&refresh_token=" + refreshToken
 
